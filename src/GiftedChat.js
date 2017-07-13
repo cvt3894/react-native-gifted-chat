@@ -30,11 +30,6 @@ import GiftedChatInteractionManager from './GiftedChatInteractionManager';
 // Min and max heights of ToolbarInput and Composer
 // Needed for Composer auto grow and ScrollView animation
 // TODO move these values to Constants.js (also with used colors #b2b2b2)
-const MIN_COMPOSER_HEIGHT = Platform.select({
-  ios: 33,
-  android: 41,
-});
-const MAX_COMPOSER_HEIGHT = 100;
 
 class GiftedChat extends React.Component {
   constructor(props) {
@@ -51,7 +46,7 @@ class GiftedChat extends React.Component {
 
     this.state = {
       isInitialized: false, // initialization will calculate maxHeight before rendering the chat
-      composerHeight: MIN_COMPOSER_HEIGHT,
+      composerHeight: props.minComposerHeight,
       messagesContainerHeight: null,
       typingDisabled: false
     };
@@ -205,7 +200,7 @@ class GiftedChat extends React.Component {
   }
 
   calculateInputToolbarHeight(composerHeight) {
-    return composerHeight + (this.getMinInputToolbarHeight() - MIN_COMPOSER_HEIGHT);
+    return composerHeight + (this.getMinInputToolbarHeight() - this.props.minComposerHeight);
   }
 
   /**
@@ -340,7 +335,7 @@ class GiftedChat extends React.Component {
     if (this.textInput) {
       this.textInput.clear();
     }
-    const newComposerHeight = MIN_COMPOSER_HEIGHT;
+    const newComposerHeight = this.props.minComposerHeight;
     const newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard(newComposerHeight);
     this.setState({
       text: '',
@@ -350,7 +345,7 @@ class GiftedChat extends React.Component {
   }
 
   onInputSizeChanged(size) {
-    const newComposerHeight = Math.max(MIN_COMPOSER_HEIGHT, Math.min(MAX_COMPOSER_HEIGHT, size.height));
+    const newComposerHeight = Math.max(this.props.minComposerHeight, Math.min(this.props.maxComposerHeight, size.height));
     const newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard(newComposerHeight);
     this.setState({
       composerHeight: newComposerHeight,
@@ -374,7 +369,7 @@ class GiftedChat extends React.Component {
       return;
     }
     this.setMaxHeight(layout.height);
-    const newComposerHeight = MIN_COMPOSER_HEIGHT;
+    const newComposerHeight = this.props.minComposerHeight;
     const newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard(newComposerHeight);
     this.setState({
       isInitialized: true,
@@ -402,7 +397,7 @@ class GiftedChat extends React.Component {
     const inputToolbarProps = {
       ...this.props,
       text: this.state.text,
-      composerHeight: Math.max(MIN_COMPOSER_HEIGHT, this.state.composerHeight),
+      composerHeight: Math.max(this.props.minComposerHeight, this.state.composerHeight),
       onSend: this.onSend,
       onInputSizeChanged: this.onInputSizeChanged,
       onTextChanged: this.onInputTextChanged,
@@ -488,6 +483,11 @@ GiftedChat.defaultProps = {
     ios: 'never',
     android: 'always',
   }),
+  minComposerHeight: Platform.select({
+    ios: 33,
+    android: 41,
+  }),
+  maxComposerHeight: 100,
   renderAccessory: null,
   renderActions: null,
   renderAvatar: undefined,
@@ -541,6 +541,8 @@ GiftedChat.propTypes = {
   user: React.PropTypes.object,
   bottomOffset: React.PropTypes.number,
   minInputToolbarHeight: React.PropTypes.number,
+  minComposerHeight: React.PropTypes.number,
+  maxComposerHeight: React.PropTypes.number,
   isLoadingEarlier: React.PropTypes.bool,
   messageIdGenerator: React.PropTypes.func,
   keyboardShouldPersistTaps: React.PropTypes.oneOf(['always', 'never', 'handled']),
