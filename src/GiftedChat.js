@@ -6,7 +6,7 @@ import {
   View
 } from 'react-native'
 
-// import ActionSheet from '@expo/react-native-action-sheet';
+import ActionSheet from '@expo/react-native-action-sheet'
 import moment from 'moment/min/moment-with-locales.min'
 import uuid from 'uuid'
 
@@ -440,9 +440,11 @@ class GiftedChat extends React.Component {
     if (this.state.isInitialized === true) {
       return (
         <View style={styles.container}>
-          <View style={styles.container} onLayout={this.onMainViewLayout}>
-            {this.renderMessages()}
-          </View>
+          <ActionSheet ref={component => { this._actionSheetRef = component }}>
+            <View style={styles.container} onLayout={this.onMainViewLayout}>
+              {this.renderMessages()}
+            </View>
+          </ActionSheet>
           {this.renderInputToolbar()}
         </View>
       )
