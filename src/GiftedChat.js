@@ -335,20 +335,20 @@ class GiftedChat extends React.Component {
       this.textInput.clear()
     }
     const newComposerHeight = this.props.minComposerHeight
-    const newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard(newComposerHeight)
+    // const newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard(newComposerHeight)
     this.setState({
       text: '',
-      composerHeight: newComposerHeight,
-      messagesContainerHeight: this.prepareMessagesContainerHeight(newMessagesContainerHeight)
+      composerHeight: newComposerHeight
+      // messagesContainerHeight: this.prepareMessagesContainerHeight(newMessagesContainerHeight)
     })
   }
 
   onInputSizeChanged (size) {
     const newComposerHeight = Math.max(this.props.minComposerHeight, Math.min(this.props.maxComposerHeight, size.height))
-    const newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard(newComposerHeight)
+    // const newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard(newComposerHeight)
     this.setState({
-      composerHeight: newComposerHeight,
-      messagesContainerHeight: this.prepareMessagesContainerHeight(newMessagesContainerHeight)
+      composerHeight: newComposerHeight
+      // messagesContainerHeight: this.prepareMessagesContainerHeight(newMessagesContainerHeight)
     })
   }
 
