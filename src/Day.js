@@ -1,29 +1,32 @@
-import React from 'react'
+import PropTypes from 'prop-types';
+import React from 'react';
 import {
   StyleSheet,
   Text,
   View,
-  ViewPropTypes
-} from 'react-native'
+  ViewPropTypes,
+} from 'react-native';
 
-import moment from 'moment'
+import moment from 'moment';
 
-import { isSameDay, isSameUser, warnDeprecated } from './utils'
+import { isSameDay, isSameUser, warnDeprecated } from './utils';
 
 export default class Day extends React.Component {
   render () {
+    const { dateFormat } = this.props;
+
     if (!isSameDay(this.props.currentMessage, this.props.previousMessage)) {
       return (
         <View style={[styles.container, this.props.containerStyle]}>
           <View style={[styles.wrapper, this.props.wrapperStyle]}>
             <Text style={[styles.text, this.props.textStyle]}>
-              {moment(this.props.currentMessage.createdAt).locale(this.context.getLocale()).format('ll').toUpperCase()}
+              {moment(this.props.currentMessage.createdAt).locale(this.context.getLocale()).format(dateFormat).toUpperCase()}
             </Text>
           </View>
         </View>
-      )
+      );
     }
-    return null
+    return null;
   }
 }
 
@@ -32,7 +35,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 5,
-    marginBottom: 10
+    marginBottom: 10,
   },
   wrapper: {
     // backgroundColor: '#ccc',
@@ -46,18 +49,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     color: '#b2b2b2',
     fontSize: 12,
-    fontWeight: '600'
-  }
-})
+    fontWeight: '600',
+  },
+});
 
 Day.contextTypes = {
-  getLocale: React.PropTypes.func
-}
+  getLocale: PropTypes.func,
+};
 
 Day.defaultProps = {
   currentMessage: {
     // TODO test if crash when createdAt === null
-    createdAt: null
+    createdAt: null,
   },
   previousMessage: {},
   containerStyle: {},
@@ -65,16 +68,17 @@ Day.defaultProps = {
   textStyle: {},
   // TODO: remove in next major release
   isSameDay: warnDeprecated(isSameDay),
-  isSameUser: warnDeprecated(isSameUser)
-}
+  isSameUser: warnDeprecated(isSameUser),
+};
 
 Day.propTypes = {
-  currentMessage: React.PropTypes.object,
-  previousMessage: React.PropTypes.object,
+  currentMessage: PropTypes.object,
+  previousMessage: PropTypes.object,
   containerStyle: ViewPropTypes.style,
   wrapperStyle: ViewPropTypes.style,
   textStyle: Text.propTypes.style,
   // TODO: remove in next major release
-  isSameDay: React.PropTypes.func,
-  isSameUser: React.PropTypes.func
-}
+  isSameDay: PropTypes.func,
+  isSameUser: PropTypes.func,
+  dateFormat: PropTypes.string,
+};
